@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -13,7 +15,10 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Session\TokenMismatchException::class,
+        \Illuminate\Validation\ValidationException::class,
     ];
 
     /**
@@ -25,6 +30,16 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        $errors = $exception->errors();
+        $data = [
+            'code' => ERROR,
+            'message' => current($errors)[0]
+        ];
+        return response()->json($data, 200);
+    }
 
     /**
      * Report or log an exception.
@@ -50,6 +65,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // 验证异常
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            // $response = $exception->getResponse()->getData();
+            // return adminApiReturn($response->code, $response->message);
+        }
+
+        // 验证异常
+        if ($exception instanceof \App\Exceptions\ApiRequestException) {
+            return apiReturn(ERROR, $exception->getMessage());
+        }
+
         return parent::render($request, $exception);
     }
 }
