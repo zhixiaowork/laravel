@@ -98,43 +98,43 @@
 
 8、部署改进事项
 
-* 自动加载器改进
+    * 自动加载器改进
 
-当你准备往生产环境部署应用时，确保你优化了你的 Composer 类的自动加载映射，这样可以使 Composer 可以很快的找到正确的加载文件去加载给定的类:
+    当你准备往生产环境部署应用时，确保你优化了你的 Composer 类的自动加载映射，这样可以使 Composer 可以很快的找到正确的加载文件去加载给定的类:
 
-`composer install --optimize-autoloader --no-dev`
+    `composer install --optimize-autoloader --no-dev`
 
-小提示：除了优化自动加载器，你还应该确保在你的项目代码仓库中包含了 composer.lock 这个文件。当你的项目代码中有 composer.lock 这个文件时，便可以更快的安装项目中需要的依赖项。
-
-
-* 优化配置加载
-
-当你将应用程序部署到生产环境时，你应当确保在你部署过程中运行 config:cache Artisan 命令：
-
-`php artisan config:cache`
-
-此命令将所有 Laravel 的配置文件合并到一个缓存文件，这将极大地减少框架在加载配置值时必须对文件系统进行访问的次数。
-
-注意：如果在你部署过程中执行 config:cache 命令，你应当确保你仅从你的配置文件中调用 env 函数。一旦配置被缓存，.env 文件将不被加载并且对 env 函数的所有调用将返回 null。
+    小提示：除了优化自动加载器，你还应该确保在你的项目代码仓库中包含了 composer.lock 这个文件。当你的项目代码中有 composer.lock 这个文件时，便可以更快的安装项目中需要的依赖项。
 
 
-* 优化路由加载
+    * 优化配置加载
 
-如果你想构建具有许多路由的大型应用程序，你应当确保在部署的过程中运行 route:cache Artisan 命令：
+    当你将应用程序部署到生产环境时，你应当确保在你部署过程中运行 config:cache Artisan 命令：
 
-`php artisan route:cache`
+    `php artisan config:cache`
 
-此命令将为所有路由注册缩减到一个缓存文件中的单个方法调用，从而在注册数百个路由时提高了路由注册的性能。
+    此命令将所有 Laravel 的配置文件合并到一个缓存文件，这将极大地减少框架在加载配置值时必须对文件系统进行访问的次数。
 
-注意：由于此功能使用 PHP 序列化，你仅能缓存专门使用基于控制器路由的应用程序路由。PHP 不能序列化闭包路由。
+    注意：如果在你部署过程中执行 config:cache 命令，你应当确保你仅从你的配置文件中调用 env 函数。一旦配置被缓存，.env 文件将不被加载并且对 env 函数的所有调用将返回 null。
 
 
-* 优化 View 加载
+    * 优化路由加载
 
-当你把你的应用程序部署到生产环境，你应当确保在部署过程中运行 view:cache Artisan 命令:
+    如果你想构建具有许多路由的大型应用程序，你应当确保在部署的过程中运行 route:cache Artisan 命令：
 
-`php artisan view:cache`
-此命令预编译了所有的 Blade views，因此不会按需编译它们，从而提高了每个返回 view 请求的性能。
+    `php artisan route:cache`
+
+    此命令将为所有路由注册缩减到一个缓存文件中的单个方法调用，从而在注册数百个路由时提高了路由注册的性能。
+
+    注意：由于此功能使用 PHP 序列化，你仅能缓存专门使用基于控制器路由的应用程序路由。PHP 不能序列化闭包路由。
+
+
+    * 优化 View 加载
+
+    当你把你的应用程序部署到生产环境，你应当确保在部署过程中运行 view:cache Artisan 命令:
+
+    `php artisan view:cache`
+    此命令预编译了所有的 Blade views，因此不会按需编译它们，从而提高了每个返回 view 请求的性能。
 
 
 ## License
