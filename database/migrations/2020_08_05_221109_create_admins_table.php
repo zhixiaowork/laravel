@@ -23,8 +23,6 @@ class CreateAdminsTable extends Migration
             $table->string('role_name')->default('')->comment('角色');
             $table->string('password')->default('')->comment('密码');
             $table->rememberToken()->comment('记住密码');
-            $table->string('token')->defalut('')->comment('token');
-            $table->dateTime('expired_at')->nullable()->comment('token过期时间');
             $table->tinyInteger('status')->default(0)->comment('管理员状态(0:正常,1:不可登录)');
             $table->timestamps();
         });

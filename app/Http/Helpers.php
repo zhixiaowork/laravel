@@ -150,7 +150,8 @@ function getUserId()
     $token = Request::header('token');
     if ($token) {
         $user = App\Models\Token::where('token', $token)->first();
-        if (! empty($user)) {
+        $now = \Carbon\Carbon::now();
+        if (! empty($user) && ($now < $user->expired_at)) {
             return $user->user_id;
         }
     }
